@@ -1,0 +1,200 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+.categoria-select-alert {
+  --background: #0f0f10;
+  --backdrop-opacity: 0.55;
+}
+
+.categoria-select-alert .alert-wrapper {
+  background: #0f0f10 !important;
+  border: 1px solid rgba(255, 122, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.62);
+  overflow: hidden;
+}
+
+.categoria-select-alert .alert-head {
+  background: linear-gradient(180deg, rgba(255, 122, 0, 0.14) 0%, rgba(255, 122, 0, 0) 100%);
+  padding-bottom: 8px;
+}
+
+.categoria-select-alert .alert-title {
+  color: #fff !important;
+  font-size: 17px;
+  letter-spacing: 0.2px;
+}
+
+.categoria-select-alert .alert-sub-title {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 13px;
+}
+
+.categoria-select-alert .alert-radio-group {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 4px 0;
+}
+
+.categoria-select-alert .alert-radio-button {
+  min-height: 48px;
+  margin: 2px 10px;
+  border-radius: 10px;
+}
+
+.categoria-select-alert .alert-radio-button .alert-button-inner {
+  padding: 10px 4px;
+}
+
+.categoria-select-alert .alert-radio-label {
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: 15px;
+}
+
+.categoria-select-alert [aria-checked="true"] .alert-radio-label {
+  color: #ff9a33 !important;
+  font-weight: 600;
+}
+
+.categoria-select-alert [aria-checked="true"] {
+  background: rgba(255, 122, 0, 0.1);
+}
+
+.categoria-select-alert .alert-radio-icon {
+  border-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.categoria-select-alert [aria-checked="true"] .alert-radio-icon {
+  border-color: #ff7a00 !important;
+}
+
+.categoria-select-alert .alert-radio-inner {
+  background-color: #ff7a00 !important;
+}
+
+.categoria-select-alert .alert-button {
+  color: #ff9a33 !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.categoria-select-alert .alert-button-role-cancel {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.forgot-password-alert {
+  --background: #0f0f10;
+  --backdrop-opacity: 0.55;
+}
+
+.forgot-password-alert .alert-wrapper {
+  background: #0f0f10 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
+}
+
+.forgot-password-alert .alert-title,
+.forgot-password-alert .alert-message {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.forgot-password-alert .alert-input {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 10px !important;
+  margin-top: 10px !important;
+  padding: 10px 12px !important;
+}
+
+.forgot-password-alert .alert-input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.forgot-password-alert .alert-button {
+  color: #ff9a33 !important;
+  font-weight: 600;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+  line-height: 1.25;
+  letter-spacing: 0.2px;
+}
+
+p, ion-label, ion-note {
+  line-height: 1.45;
+}
+
+ion-button {
+  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+}
+
+ion-button:hover {
+  filter: brightness(1.04);
+}
+
+ion-button:active {
+  transform: translateY(1px);
+}
+
+ion-button.button-disabled {
+  opacity: 0.55;
+  filter: grayscale(0.1);
+}
+
+.custom-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.custom-input:focus-within {
+  box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.empty-state {
+  padding: var(--app-space-md);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: var(--app-radius-md);
+  background: rgba(255, 255, 255, 0.02);
+}

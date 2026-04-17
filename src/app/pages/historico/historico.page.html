@@ -1,0 +1,68 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Histórico</ion-title>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="tipoAlvo" class="dark-segment">
+    <ion-segment-button value="despesas">
+      <ion-label>Despesas</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="guinchadas">
+      <ion-label>Receitas</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+
+  <!-- Lista de Despesas -->
+  @if (tipoAlvo === 'despesas') {
+    <ion-list class="transparent-list">
+      @for (d of despesas; track d.id) {
+        <ion-item class="glass-item">
+          <ion-icon slot="start" name="arrow-down-circle" color="danger"></ion-icon>
+          <ion-label>
+            <h3>{{ d.categoria }}</h3>
+            <p>{{ d.descricao || 'Sem descrição' }} | {{ d.data | date:'dd/MM/yyyy' }}</p>
+          </ion-label>
+          <div slot="end" class="valor-box">
+            <span class="valor txt-danger">- R$ {{ d.valor | number:'1.2-2' }}</span>
+            <ion-button fill="clear" color="medium" (click)="excluirDespesa(d.id)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+      }
+      @if (despesas.length === 0) {
+        <div class="empty-state">Sem despesas registradas</div>
+      }
+    </ion-list>
+  }
+
+  <!-- Lista de Receitas -->
+  @if (tipoAlvo === 'guinchadas') {
+    <ion-list class="transparent-list">
+      @for (g of guinchadas; track g.id) {
+        <ion-item class="glass-item">
+          <ion-icon slot="start" name="arrow-up-circle" color="success"></ion-icon>
+          <ion-label>
+            <h3>Frete / Serviço</h3>
+            <p>{{ g.descricao || 'Sem descrição' }} | {{ g.data | date:'dd/MM/yyyy' }}</p>
+          </ion-label>
+          <div slot="end" class="valor-box">
+            <span class="valor txt-success">+ R$ {{ g.valor | number:'1.2-2' }}</span>
+            <ion-button fill="clear" color="medium" (click)="excluirGuinchada(g.id)">
+              <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-item>
+      }
+      @if (guinchadas.length === 0) {
+        <div class="empty-state">Sem receitas registradas</div>
+      }
+    </ion-list>
+  }
+
+</ion-content>

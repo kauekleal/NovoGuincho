@@ -1,0 +1,73 @@
+ion-content {
+  --background: radial-gradient(circle at top left, #1a1a1a 0%, #000000 100%);
+  --color: var(--ion-text-color);
+}
+
+.transparent-toolbar {
+  --background: transparent;
+  --border-color: transparent;
+  color: #fff;
+  ion-title {
+    font-weight: bold;
+    font-size: 20px;
+  }
+}
+
+.dark-segment {
+  --background: rgba(255, 255, 255, 0.05);
+  margin: var(--app-space-sm);
+  border-radius: var(--app-radius-sm);
+  
+  ion-segment-button {
+    --indicator-color: var(--ion-color-primary);
+    color: rgba(255, 255, 255, 0.7);
+    --color-checked: #fff;
+    font-weight: bold;
+  }
+}
+
+.transparent-list {
+  background: transparent;
+}
+
+.glass-item {
+  --background: var(--app-card-bg);
+  --border-radius: var(--app-radius-md);
+  margin: 0 10px 10px 10px;
+  --border-color: transparent;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  --padding-start: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
+  h3 {
+    color: var(--ion-text-color);
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+  }
+}
+
+.valor-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .valor {
+    font-weight: bold;
+    font-size: 15px;
+  }
+}
+
+.txt-danger { color: var(--ion-color-primary); }
+.txt-success { color: #ffffff; }
+
+.empty-state {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 40px;
+  font-style: italic;
+}

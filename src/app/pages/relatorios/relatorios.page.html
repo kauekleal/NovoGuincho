@@ -1,0 +1,208 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Resumo Financeiro</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <!-- Top Resumo Cards -->
+  <ion-grid class="resumo-grid">
+    <ion-row>
+      <ion-col size="4">
+        <div class="mini-card lucro">
+          <p>Líquido</p>
+          <h3 [class.negative]="resumo.lucroLiquido < 0">
+            R$ {{ resumo.lucroLiquido | number:'1.2-2' }}
+          </h3>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="mini-card receita">
+          <p>Receita</p>
+          <h3>R$ {{ resumo.receitaTotal | number:'1.2-2' }}</h3>
+        </div>
+      </ion-col>
+      <ion-col size="4">
+        <div class="mini-card despesa">
+          <p>Despesa</p>
+          <h3>R$ {{ resumo.despesasTotais | number:'1.2-2' }}</h3>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Gráficos -->
+  <ion-grid>
+    <ion-row>
+      <!-- Lucro / Receita -->
+      <ion-col size="12" sizeMd="6">
+        <ion-card class="glass-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="trending-up-outline" color="success"></ion-icon>
+              Evolução da Receita
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas baseChart [data]="lucroChartData" [options]="lucroChartOptions" [type]="'bar'"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <!-- Despesas por Categoria -->
+      <ion-col size="12" sizeMd="6">
+        <ion-card class="glass-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="pie-chart-outline" color="warning"></ion-icon>
+              Composição de Despesas
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="doughnut-container">
+            <canvas baseChart [data]="despesasChartData" [options]="despesasChartOptions" [type]="'doughnut'"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Lançamento Despesa Modal -->
+  <ion-modal [isOpen]="isDespesaModalOpen" (didDismiss)="isDespesaModalOpen = false" class="glass-modal">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar class="transparent-toolbar">
+          <ion-title>Nova Despesa</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="isDespesaModalOpen = false">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding modal-content-dark">
+        <div class="modal-form">
+          <ion-item class="custom-input glass-input" lines="none">
+            <ion-label position="stacked">Categoria</ion-label>
+            <ion-select
+              [(ngModel)]="formDespesa.categoria"
+              interface="alert"
+              [interfaceOptions]="{
+                header: 'Categoria da despesa',
+                subHeader: 'Selecione uma opção',
+                cssClass: 'categoria-select-alert'
+              }"
+              okText="Confirmar"
+              cancelText="Voltar">
+              <ion-select-option value="Gasolina">Diesel / Gasolina</ion-select-option>
+              <ion-select-option value="Pedágio">Pedágio</ion-select-option>
+              <ion-select-option value="Manutenção">Manutenção (Oficina)</ion-select-option>
+              <ion-select-option value="Pessoal">Despesa Pessoal</ion-select-option>
+              <ion-select-option value="Outros">Outros</ion-select-option>
+            </ion-select>
+          </ion-item>
+          
+          <ion-item class="custom-input glass-input" lines="none">
+            <ion-label position="stacked">Valor (R$)</ion-label>
+            <ion-input type="number" [(ngModel)]="formDespesa.valor" placeholder="Ex:"></ion-input>
+          </ion-item>
+
+          <ion-item class="custom-input glass-input" lines="none">
+            <ion-label position="stacked">Descrição (Opcional)</ion-label>
+            <ion-input type="text" [(ngModel)]="formDespesa.descricao" placeholder="Ex: "></ion-input>
+          </ion-item>
+
+          <div class="date-picker-wrapper">
+            <ion-label class="date-label">Data da Despesa</ion-label>
+            <ion-datetime-button datetime="despesa-datetime" class="date-btn"></ion-datetime-button>
+          </div>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="despesa-datetime"
+                presentation="date"
+                [(ngModel)]="formDespesa.data"
+                [preferWheel]="false"
+                locale="pt-BR"
+                class="dark-datetime">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+
+          <ion-button expand="block" color="danger" class="save-bg-btn" (click)="salvarDespesa()">
+            Debitar Despesa
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Lançamento Guinchada Modal -->
+  <ion-modal [isOpen]="isGuinchadaModalOpen" (didDismiss)="isGuinchadaModalOpen = false" class="glass-modal">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar class="transparent-toolbar">
+          <ion-title>Novo Frete Serviço</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="isGuinchadaModalOpen = false">Fechar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding modal-content-dark">
+        <div class="modal-form">
+          <ion-item class="custom-input glass-input" lines="none">
+            <ion-label position="stacked">Valor do Frete (R$)</ion-label>
+            <ion-input type="number" [(ngModel)]="formGuinchada.valor" placeholder="Ex: "></ion-input>
+          </ion-item>
+
+          <ion-item class="custom-input glass-input" lines="none">
+            <ion-label position="stacked">Descrição</ion-label>
+            <ion-input type="text" [(ngModel)]="formGuinchada.descricao" placeholder="Ex:"></ion-input>
+          </ion-item>
+
+          <div class="date-picker-wrapper">
+            <ion-label class="date-label">Data do Serviço</ion-label>
+            <ion-datetime-button datetime="guinchada-datetime" class="date-btn"></ion-datetime-button>
+          </div>
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="guinchada-datetime"
+                presentation="date"
+                [(ngModel)]="formGuinchada.data"
+                [preferWheel]="false"
+                locale="pt-BR"
+                class="dark-datetime">
+              </ion-datetime>
+            </ng-template>
+          </ion-modal>
+
+          <ion-button expand="block" color="success" class="save-bg-btn" (click)="salvarGuinchada()">
+            Adicionar Receita
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Floating Action Buttons -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="finance-fab">
+    <ion-fab-button class="main-action-btn">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top" class="finance-fab-list">
+      <ion-fab-button class="expense-action-btn" (click)="isDespesaModalOpen = true">
+        <ion-icon name="remove-circle"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button class="income-action-btn" (click)="isGuinchadaModalOpen = true">
+        <ion-icon name="car-sport"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+
+</ion-content>

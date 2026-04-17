@@ -1,0 +1,48 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="transparent-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" text="Voltar" icon="chevron-back-outline"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nova Conta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <div class="cadastro-container">
+    <div class="header-text">
+      <h2>Crie seu Acesso</h2>
+      <p>Preencha os dados abaixo para se cadastrar</p>
+    </div>
+
+    <form class="cadastro-form" (ngSubmit)="criarConta()">
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input type="text" placeholder="Nome Completo" [(ngModel)]="nome" name="nome"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-input type="tel" placeholder="Telefone / WhatsApp" [(ngModel)]="telefone" name="telefone"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input type="email" placeholder="Email" [(ngModel)]="email" name="email"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input type="password" placeholder="Senha" [(ngModel)]="senha" name="senha"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+        <ion-input type="password" placeholder="Confirmar Senha" [(ngModel)]="confirmarSenha" name="confirmarSenha"></ion-input>
+      </ion-item>
+
+      <ion-button type="submit" expand="block" shape="round" class="cadastro-btn">
+        Criar Conta
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

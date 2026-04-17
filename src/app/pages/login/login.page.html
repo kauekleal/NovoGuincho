@@ -1,0 +1,32 @@
+<ion-content class="ion-padding" [fullscreen]="true">
+  <div class="login-container">
+    <div class="logo-wrapper">
+      <img src="assets/logo.png" alt="HK Guincho Logo">
+    </div>
+
+    <form class="login-form" (ngSubmit)="entrar()">
+      <h1 class="welcome-text">Bem-vindo de volta,</h1>
+      <p class="subtitle">Faça login com seu nome de usuário para acessar o painel</p>
+
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+        <ion-input type="text" placeholder="Nome de usuário" [(ngModel)]="username" name="username"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input" lines="none">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input type="password" placeholder="Senha" [(ngModel)]="senha" name="senha"></ion-input>
+      </ion-item>
+
+      <div class="forgot-password">
+        <a (click)="recuperarSenha()">Esqueceu a senha?</a>
+      </div>
+
+      <ion-button type="submit" expand="block" shape="round" class="login-btn">
+        Entrar
+      </ion-button>
+
+      <p class="register-text">Ainda não tem conta? <a routerLink="/cadastro">Cadastre-se</a></p>
+    </form>
+  </div>
+</ion-content>

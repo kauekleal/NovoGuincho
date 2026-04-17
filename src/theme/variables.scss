@@ -1,0 +1,46 @@
+:root {
+  /** primary (Orange Accent) **/
+  --ion-color-primary: #ff7a00;
+  --ion-color-primary-rgb: 255, 122, 0;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #e06c00;
+  --ion-color-primary-tint: #ff8a1f;
+
+  /** secondary (Black Surface) **/
+  --ion-color-secondary: #000000;
+  --ion-color-secondary-rgb: 0, 0, 0;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #000000;
+  --ion-color-secondary-tint: #1a1a1a;
+
+  /** tertiary (White Accent/Text) **/
+  --ion-color-tertiary: #ffffff;
+  --ion-color-tertiary-rgb: 255, 255, 255;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+  --ion-color-tertiary-shade: #e0e0e0;
+  --ion-color-tertiary-tint: #ffffff;
+
+  /* Global background and text */
+  --ion-background-color: #000000;
+  --ion-text-color: #ffffff;
+
+  /* Custom Helpers */
+  --app-card-bg: rgba(30, 30, 30, 0.6);
+  --app-input-bg: rgba(255, 255, 255, 0.05);
+  --app-radius-sm: 10px;
+  --app-radius-md: 14px;
+  --app-radius-lg: 20px;
+  --app-space-xs: 8px;
+  --app-space-sm: 12px;
+  --app-space-md: 16px;
+  --app-space-lg: 24px;
+}
+
+body.dark {
+  /* Dark mode is the standard here */
+  --ion-background-color: #000000;
+  --ion-text-color: #ffffff;
+}
