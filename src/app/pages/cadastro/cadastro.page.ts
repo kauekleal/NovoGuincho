@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class CadastroPage implements OnInit {
   public nome = '';
+  public username = '';
   public telefone = '';
   public email = '';
   public senha = '';
@@ -30,7 +31,7 @@ export class CadastroPage implements OnInit {
   }
 
   async criarConta() {
-    if (!this.nome.trim() || !this.email.trim() || !this.senha.trim() || !this.confirmarSenha.trim()) {
+    if (!this.nome.trim() || !this.username.trim() || !this.email.trim() || !this.senha.trim() || !this.confirmarSenha.trim()) {
       const toast = await this.toastController.create({
         message: 'Preencha todos os campos para criar a conta.',
         duration: 1800,
@@ -66,7 +67,7 @@ export class CadastroPage implements OnInit {
     try {
       await firstValueFrom(
         this.authService.register(
-          this.email.trim(),
+          this.username.trim(),
           this.nome.trim(),
           this.email.trim(),
           this.senha,

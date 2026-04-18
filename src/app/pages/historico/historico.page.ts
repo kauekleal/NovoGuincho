@@ -19,6 +19,7 @@ export class HistoricoPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.financeiroService.loadExpenses();
+    this.financeiroService.loadServices();
 
     this.subs.add(
       this.financeiroService.despesas$.subscribe(res => {

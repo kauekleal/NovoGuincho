@@ -21,6 +21,18 @@
       </ion-item>
 
       <ion-item class="custom-input" lines="none">
+        <ion-icon name="at-outline" slot="start"></ion-icon>
+        <ion-input
+          type="text"
+          placeholder="Nome de Usuário"
+          [(ngModel)]="username"
+          name="username"
+          autocapitalize="off"
+          autocorrect="off">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input" lines="none">
         <ion-icon name="call-outline" slot="start"></ion-icon>
         <ion-input type="tel" placeholder="Telefone / WhatsApp" [(ngModel)]="telefone" name="telefone"></ion-input>
       </ion-item>

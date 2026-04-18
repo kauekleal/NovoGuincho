@@ -161,8 +161,13 @@
           </ion-item>
 
           <ion-item class="custom-input glass-input" lines="none">
-            <ion-label position="stacked">Descrição</ion-label>
-            <ion-input type="text" [(ngModel)]="formGuinchada.descricao" placeholder="Ex:"></ion-input>
+            <ion-label position="stacked">Descrição (máx. 50)</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="formGuinchada.descricao"
+              placeholder="Ex: Reboque carro Honda Civic"
+              maxlength="50">
+            </ion-input>
           </ion-item>
 
           <div class="date-picker-wrapper">

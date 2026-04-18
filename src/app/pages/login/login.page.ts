@@ -49,6 +49,7 @@ export class LoginPage implements OnInit {
       );
 
       this.financeiroService.loadExpenses();
+      this.financeiroService.loadServices();
       await this.router.navigate(['/relatorios']);
     } catch (error) {
       const toast = await this.toastController.create({

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { FinanceiroService } from '../../services/financeiro.service';
 import { Subscription } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-relatorios',
@@ -59,10 +60,24 @@ export class RelatoriosPage implements OnInit, OnDestroy {
     color: '#fff'
   };
 
-  constructor(private financeiroService: FinanceiroService) { }
+  constructor(
+    private financeiroService: FinanceiroService,
+    private toastController: ToastController,
+  ) { }
+
+  private async showToast(message: string, color: 'success' | 'warning' | 'danger' = 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 1800,
+      color,
+      position: 'top',
+    });
+    await toast.present();
+  }
 
   ngOnInit() {
     this.financeiroService.loadExpenses();
+    this.financeiroService.loadServices();
 
     this.subs.add(
       this.financeiroService.despesas$.subscribe(despesas => {
@@ -130,25 +145,52 @@ export class RelatoriosPage implements OnInit, OnDestroy {
   }
 
   // Action Methods
-  salvarGuinchada() {
-    if (!this.formGuinchada.valor) return;
+  async salvarGuinchada() {
+    const valor = Number(this.formGuinchada.valor);
+    const descricao = (this.formGuinchada.descricao || '').trim();
+
+    if (!valor || valor <= 0) {
+      await this.showToast('Informe um valor válido para o frete.', 'warning');
+      return;
+    }
+
+    if (!descricao) {
+      await this.showToast('Informe uma descrição para o frete.', 'warning');
+      return;
+    }
+
+    if (descricao.length > 50) {
+      await this.showToast('A descrição deve ter no máximo 50 caracteres.', 'danger');
+      return;
+    }
+
     this.financeiroService.addGuinchada({
-      valor: Number(this.formGuinchada.valor),
-      descricao: this.formGuinchada.descricao,
+      valor,
+      descricao,
       data: new Date(this.formGuinchada.data)
     });
+
+    await this.showToast('Receita registrada com sucesso!', 'success');
     this.formGuinchada = { valor: null, descricao: '', data: new Date().toISOString() };
     this.isGuinchadaModalOpen = false;
   }
 
-  salvarDespesa() {
-    if (!this.formDespesa.valor) return;
+  async salvarDespesa() {
+    const valor = Number(this.formDespesa.valor);
+
+    if (!valor || valor <= 0) {
+      await this.showToast('Informe um valor válido para a despesa.', 'warning');
+      return;
+    }
+
     this.financeiroService.addDespesa({
-      valor: Number(this.formDespesa.valor),
+      valor,
       categoria: this.formDespesa.categoria,
       descricao: this.formDespesa.descricao,
       data: new Date(this.formDespesa.data)
     });
+
+    await this.showToast('Despesa registrada com sucesso!', 'success');
     this.formDespesa = { valor: null, categoria: 'Gasolina', descricao: '', data: new Date().toISOString() };
     this.isDespesaModalOpen = false;
   }
