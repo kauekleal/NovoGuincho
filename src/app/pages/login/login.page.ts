@@ -31,34 +31,39 @@ export class LoginPage implements OnInit {
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
   }
 
+  private async showToast(message: string, color: 'success' | 'warning' | 'danger') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2200,
+      color,
+      position: 'top',
+    });
+    await toast.present();
+  }
+
   async entrar() {
-    if (!this.username?.trim() || !this.senha?.trim()) {
-      const toast = await this.toastController.create({
-        message: 'Preencha nome de usuário e senha para entrar.',
-        duration: 1800,
-        color: 'warning',
-        position: 'top'
-      });
-      await toast.present();
+    const username = this.username?.trim();
+    const senha = this.senha?.trim();
+
+    if (!username || !senha) {
+      await this.showToast('Preencha nome de usuário e senha para entrar.', 'warning');
+      return;
+    }
+
+    if (senha.length < 6) {
+      await this.showToast('A senha deve ter no mínimo 6 caracteres.', 'danger');
       return;
     }
 
     try {
-      await firstValueFrom(
-        this.authService.login(this.username.trim(), this.senha.trim()),
-      );
+      await firstValueFrom(this.authService.login(username, senha));
 
       this.financeiroService.loadExpenses();
       this.financeiroService.loadServices();
       await this.router.navigate(['/relatorios']);
-    } catch (error) {
-      const toast = await this.toastController.create({
-        message: 'Falha no login. Verifique usuário e senha.',
-        duration: 2200,
-        color: 'danger',
-        position: 'top'
-      });
-      await toast.present();
+    } catch (error: any) {
+      const backendMessage = error?.error?.message || 'Falha no login. Verifique usuário e senha.';
+      await this.showToast(backendMessage, 'danger');
     }
   }
 
