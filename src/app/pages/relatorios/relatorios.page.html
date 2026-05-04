@@ -13,6 +13,22 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
+  <!-- Month Selector -->
+  <div class="month-selector-bar">
+    <ion-button fill="clear" (click)="mesAnterior()" class="nav-btn">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </ion-button>
+    
+    <div class="current-month">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <span>{{ getMonthName() }}</span>
+    </div>
+
+    <ion-button fill="clear" (click)="proximoMes()" class="nav-btn">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </ion-button>
+  </div>
+
   <!-- Top Resumo Cards -->
   <ion-grid class="resumo-grid">
     <ion-row>
@@ -161,7 +177,28 @@
           </ion-item>
 
           <ion-item class="custom-input glass-input" lines="none">
-            <ion-label position="stacked">Descrição (máx. 50)</ion-label>
+            <ion-icon name="location-outline" slot="start" class="input-icon"></ion-icon>
+            <ion-label position="stacked">Partida</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="formGuinchada.partida"
+              placeholder="Ex: São Paulo">
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="custom-input glass-input" lines="none">
+            <ion-icon name="flag-outline" slot="start" class="input-icon"></ion-icon>
+            <ion-label position="stacked">Chegada</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="formGuinchada.chegada"
+              placeholder="Ex: Rio de Janeiro">
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="custom-input glass-input" lines="none">
+            <ion-icon name="chatbubble-ellipses-outline" slot="start" class="input-icon"></ion-icon>
+            <ion-label position="stacked">Descrição / Notas (Opcional)</ion-label>
             <ion-input
               type="text"
               [(ngModel)]="formGuinchada.descricao"
@@ -189,6 +226,15 @@
 
           <ion-button expand="block" color="success" class="save-bg-btn" (click)="salvarGuinchada()">
             Adicionar Receita
+          </ion-button>
+
+          <ion-button 
+            expand="block" 
+            color="primary" 
+            class="nfse-btn" 
+            (click)="abrirEmissorNacional()">
+            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+            EMITIR NFSE (EMISSOR NACIONAL)
           </ion-button>
         </div>
       </ion-content>

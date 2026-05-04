@@ -198,3 +198,47 @@ ion-button.button-disabled {
   border-radius: var(--app-radius-md);
   background: rgba(255, 255, 255, 0.02);
 }
+
+/* Month Selector Global Styles */
+.month-selector-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--app-card-bg);
+  border-radius: var(--app-radius-md);
+  padding: 5px 10px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+
+  .current-month {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+
+    ion-icon {
+      color: var(--ion-color-primary);
+      font-size: 20px;
+    }
+  }
+
+  .nav-btn {
+    --color: rgba(255, 255, 255, 0.6);
+    --padding-start: 8px;
+    --padding-end: 8px;
+    height: 36px;
+    margin: 0;
+
+    &:hover {
+      --color: var(--ion-color-primary);
+    }
+  }
+}
+
+.history-selector {
+  margin: 10px 16px;
+}

@@ -9,6 +9,7 @@ export interface ServiceResponse {
   userId: string;
   value: number | string;
   description: string;
+  date?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -16,12 +17,15 @@ export interface ServiceResponse {
 export interface CreateServicePayload {
   value: number;
   description: string;
+  date?: string;
 }
 
 export interface UpdateServicePayload {
   value?: number;
   description?: string;
+  date?: string;
 }
+
 
 @Injectable({
   providedIn: 'root',

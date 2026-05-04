@@ -9,10 +9,12 @@ export interface ExpenseResponse {
   category: string;
   value: string;
   description?: string;
+  date?: string;
   createdById: string;
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface CreateExpensePayload {
   category: string;

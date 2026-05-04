@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://apiguincho-production.up.railway.app'
+apiUrl: 'https://apiguincho-production.up.railway.app'
 };
 
 /*

@@ -5,6 +5,22 @@
     </ion-buttons>
     <ion-title>Histórico</ion-title>
   </ion-toolbar>
+
+  <div class="month-selector-bar history-selector">
+    <ion-button fill="clear" (click)="mesAnterior()" class="nav-btn">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </ion-button>
+    
+    <div class="current-month">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <span>{{ getMonthName() }}</span>
+    </div>
+
+    <ion-button fill="clear" (click)="proximoMes()" class="nav-btn">
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </ion-button>
+  </div>
+
   <ion-segment [(ngModel)]="tipoAlvo" class="dark-segment">
     <ion-segment-button value="despesas">
       <ion-label>Despesas</ion-label>
@@ -23,7 +39,7 @@
       @for (d of despesas; track d.id) {
         <ion-item class="glass-item">
           <ion-icon slot="start" name="arrow-down-circle" color="danger"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <h3>{{ d.categoria }}</h3>
             <p>{{ d.descricao || 'Sem descrição' }} | {{ d.data | date:'dd/MM/yyyy' }}</p>
           </ion-label>
@@ -47,7 +63,7 @@
       @for (g of guinchadas; track g.id) {
         <ion-item class="glass-item">
           <ion-icon slot="start" name="arrow-up-circle" color="success"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <h3>Frete / Serviço</h3>
             <p>{{ g.descricao || 'Sem descrição' }} | {{ g.data | date:'dd/MM/yyyy' }}</p>
           </ion-label>

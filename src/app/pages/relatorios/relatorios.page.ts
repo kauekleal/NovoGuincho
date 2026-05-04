@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
 import { FinanceiroService } from '../../services/financeiro.service';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 
 @Component({
@@ -19,8 +19,19 @@ export class RelatoriosPage implements OnInit, OnDestroy {
   public isGuinchadaModalOpen = false;
   public isDespesaModalOpen = false;
 
+  // State
+  public selectedDate: Date = new Date();
+  private allDespesas: any[] = [];
+  private allGuinchadas: any[] = [];
+
   // Forms
-  public formGuinchada: any = { valor: null, descricao: '', data: new Date().toISOString() };
+  public formGuinchada: any = { 
+    valor: null, 
+    descricao: '', 
+    partida: '', 
+    chegada: '', 
+    data: new Date().toISOString() 
+  };
   public formDespesa: any = { valor: null, categoria: 'Gasolina', descricao: '', data: new Date().toISOString() };
 
   private subs: Subscription = new Subscription();
@@ -79,23 +90,63 @@ export class RelatoriosPage implements OnInit, OnDestroy {
     this.financeiroService.loadExpenses();
     this.financeiroService.loadServices();
 
+    // Reactive filtering logic
     this.subs.add(
-      this.financeiroService.despesas$.subscribe(despesas => {
-        this.resumo = this.financeiroService.getResumo();
-        this.updateDespesasChart(despesas);
-      })
-    );
-
-    this.subs.add(
-      this.financeiroService.guinchadas$.subscribe(guinchadas => {
-        this.resumo = this.financeiroService.getResumo();
-        this.updateLucroChart(guinchadas);
+      combineLatest([
+        this.financeiroService.despesas$,
+        this.financeiroService.guinchadas$,
+        this.financeiroService.selectedDate$
+      ]).subscribe(([despesas, guinchadas, date]) => {
+        this.allDespesas = despesas;
+        this.allGuinchadas = guinchadas;
+        this.selectedDate = date;
+        this.applyFilters();
       })
     );
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  applyFilters() {
+    const selYearMonth = this.getCompetencia(this.selectedDate);
+
+    // Filter current month data
+    const filteredDespesas = this.allDespesas.filter(d => this.getCompetencia(d.data) === selYearMonth);
+    const filteredGuinchadas = this.allGuinchadas.filter(g => this.getCompetencia(g.data) === selYearMonth);
+
+    // Calculate Resumo for the selected month
+    const dTot = filteredDespesas.reduce((acc, crr) => acc + Number(crr.valor || 0), 0);
+    const rTot = filteredGuinchadas.reduce((acc, crr) => acc + Number(crr.valor || 0), 0);
+    
+    this.resumo = {
+      despesasTotais: dTot,
+      receitaTotal: rTot,
+      lucroLiquido: rTot - dTot
+    };
+
+    // Update Charts
+    this.updateDespesasChart(filteredDespesas);
+    this.updateLucroChart(this.allGuinchadas); 
+  }
+
+  // Helper to get YYYY-MM competencia safely
+  private getCompetencia(date: any): string {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+
+    // If it's an ISO string without time or with T00:00:00, 
+    // it might be interpreted as UTC and shift to previous day in local time.
+    // We'll use a trick: if it's a string, we take the first 7 chars.
+    if (typeof date === 'string' && date.length >= 7) {
+      return date.substring(0, 7);
+    }
+
+    // For Date objects, we use the local year/month
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    return `${d.getFullYear()}-${month}`;
   }
 
   updateDespesasChart(despesas: any[]) {
@@ -148,30 +199,49 @@ export class RelatoriosPage implements OnInit, OnDestroy {
   async salvarGuinchada() {
     const valor = Number(this.formGuinchada.valor);
     const descricao = (this.formGuinchada.descricao || '').trim();
+    const partida = (this.formGuinchada.partida || '').trim();
+    const chegada = (this.formGuinchada.chegada || '').trim();
 
     if (!valor || valor <= 0) {
       await this.showToast('Informe um valor válido para o frete.', 'warning');
       return;
     }
 
-    if (!descricao) {
-      await this.showToast('Informe uma descrição para o frete.', 'warning');
+    if (!partida) {
+      await this.showToast('Informe o local de partida.', 'warning');
       return;
     }
 
-    if (descricao.length > 50) {
-      await this.showToast('A descrição deve ter no máximo 50 caracteres.', 'danger');
+    if (!chegada) {
+      await this.showToast('Informe o local de chegada.', 'warning');
+      return;
+    }
+
+    // Concatenate partida and chegada with description
+    let fullDescription = `${partida} -> ${chegada}`;
+    if (descricao) {
+      fullDescription += ` - ${descricao}`;
+    }
+
+    if (fullDescription.length > 50) {
+      await this.showToast('A descrição completa (Partida + Chegada + Notas) excedeu 50 caracteres.', 'danger');
       return;
     }
 
     this.financeiroService.addGuinchada({
       valor,
-      descricao,
+      descricao: fullDescription,
       data: new Date(this.formGuinchada.data)
     });
 
     await this.showToast('Receita registrada com sucesso!', 'success');
-    this.formGuinchada = { valor: null, descricao: '', data: new Date().toISOString() };
+    this.formGuinchada = { 
+      valor: null, 
+      descricao: '', 
+      partida: '', 
+      chegada: '', 
+      data: new Date().toISOString() 
+    };
     this.isGuinchadaModalOpen = false;
   }
 
@@ -201,6 +271,27 @@ export class RelatoriosPage implements OnInit, OnDestroy {
 
   onGuinchadaDateChange(event: any) {
     this.formGuinchada.data = event.detail.value;
+  }
+
+  abrirEmissorNacional() {
+    window.open('https://www.nfse.gov.br/EmissorNacional/Login?ReturnUrl=%2fEmissorNacional%2fNotas%2fEmitidas%3fbusca%3d%26datainicio%3d01%252F01%252F2025%26datafim%3d31%252F01%252F2025&busca=&datainicio=01%2F01%2F2025&datafim=31%2F01%2F2025', '_blank');
+  }
+
+  // Month Navigation
+  mesAnterior() {
+    this.financeiroService.prevMonth();
+  }
+
+  proximoMes() {
+    this.financeiroService.nextMonth();
+  }
+
+  getMonthName(): string {
+    const names = [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+    return `${names[this.selectedDate.getMonth()]} ${this.selectedDate.getFullYear()}`;
   }
 
 }

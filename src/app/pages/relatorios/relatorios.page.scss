@@ -111,11 +111,32 @@ h1, h2, h3, h4, h5, p {
     color: #fff;
     --placeholder-color: rgba(255, 255, 255, 0.5);
   }
+
+  .input-icon {
+    color: var(--ion-color-primary);
+    font-size: 20px;
+    margin-top: 15px;
+    margin-right: 10px;
+  }
+}
+
+.nfse-btn {
+  margin-top: 15px;
+  --border-radius: 8px;
+  font-weight: bold;
+  height: 50px;
+  font-size: 14px;
+  text-transform: uppercase;
+  
+  ion-icon {
+    font-size: 18px;
+  }
 }
 
 .save-bg-btn {
-  margin-top: 30px;
+  margin-top: 25px;
   height: 50px;
+  --border-radius: 8px;
   font-weight: bold;
 }
 
